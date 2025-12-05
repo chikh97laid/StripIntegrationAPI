@@ -1,0 +1,6 @@
+@stripIntegration_HostAddress = http://localhost:5015
+
+GET {{stripIntegration_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

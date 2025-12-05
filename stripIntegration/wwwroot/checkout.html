@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Checkout — Proceed to Payment</title>
+    <style>
+      :root {
+        --bg: #f5f7fb;
+        --card: #ffffff;
+        --accent: #5469d4;
+        --accent-600: #4352c0;
+        --muted: #6b7280;
+      }
+      html,
+      body {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto,
+          "Helvetica Neue", Arial;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(180deg, var(--bg), #edf2f7);
+      }
+      .card {
+        width: min(520px, 94vw);
+        background: var(--card);
+        border-radius: 12px;
+        padding: 36px;
+        box-shadow: 0 6px 20px rgba(16, 24, 40, 0.08);
+        text-align: center;
+      }
+      h1 {
+        font-size: 20px;
+        margin: 0 0 8px;
+        color: #0f172a;
+      }
+      p.lead {
+        margin: 0 0 20px;
+        color: var(--muted);
+      }
+      .price {
+        font-weight: 700;
+        color: #0f172a;
+        margin-bottom: 20px;
+      }
+      .btn {
+        display: inline-block;
+        padding: 12px 20px;
+        border-radius: 8px;
+        background: linear-gradient(180deg, var(--accent), var(--accent-600));
+        color: #fff;
+        font-weight: 600;
+        border: 0;
+        cursor: pointer;
+        box-shadow: 0 6px 18px rgba(67, 82, 192, 0.18);
+        transition: transform 0.08s ease, opacity 0.08s ease;
+      }
+      .btn:disabled {
+        opacity: 0.6;
+        cursor: default;
+      }
+      .meta {
+        font-size: 13px;
+        margin-top: 18px;
+        color: var(--muted);
+      }
+      .error {
+        color: #b91c1c;
+        margin-top: 16px;
+      }
+      .spinner {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.25);
+        border-top-color: #ffffff;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin-left: 10px;
+        vertical-align: middle;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .dashboard-btn {
+        display: inline-block;
+        padding: 12px 25px;
+        background-color: #4caf50; /* أخضر */
+        color: white;
+        text-decoration: none;
+        font-size: 18px;
+        border-radius: 8px;
+        transition: background-color 0.3s, transform 0.2s;
+      }
+
+      .dashboard-btn:hover {
+        background-color: #45a049;
+        transform: scale(1.05);
+      }
+
+      .dashboard-container {
+        text-align: center;
+        margin-top: 50px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card" role="main">
+      <h1>Proceed to Payment</h1>
+      <p class="lead">
+        Secure checkout powered by Stripe — a very small demo page.
+      </p>
+
+      <!-- The total will be fetched from the backend based on Items -->
+      <div class="price">
+        Amount: <strong id="amountDisplay">Loading…</strong>
+      </div>
+
+      <button id="payBtn" class="btn">Pay</button>
+      <div class="dashboard-container">
+        <a href="/dashboard.html" class="dashboard-btn">View Dashboard</a>
+      </div>
+
+      <div id="message" class="meta" aria-live="polite"></div>
+      <div id="error" class="error" role="alert" style="display: none"></div>
+    </div>
+
+    <script>
+      const payBtn = document.getElementById("payBtn");
+      const message = document.getElementById("message");
+      const errorEl = document.getElementById("error");
+
+      // Example cart items -- adjust values as needed
+      const cartItems = [
+        { ProductId: 1, Quantity: 2 },
+        { ProductId: 2, Quantity: 1 },
+      ];
+
+      // Customer email for checkout (can be collected via form)
+      const customerEmail = "koko@gmail.com";
+
+      function setLoading(isLoading) {
+        payBtn.disabled = isLoading;
+        payBtn.innerHTML = isLoading
+          ? 'Opening… <span class="spinner" aria-hidden="true"></span>'
+          : "Pay";
+      }
+
+      async function createCheckout() {
+        errorEl.style.display = "none";
+        message.textContent = "";
+
+        try {
+          setLoading(true);
+
+          const body = {
+            CustomerEmail: customerEmail,
+            Items: cartItems,
+          };
+
+          const res = await fetch("/api/payments/create-session", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body),
+          });
+
+          let data;
+          try {
+            data = await res.json(); // نحاول قراءة JSON
+          } catch {
+            data = await res.text(); // لو لم يكن JSON، نقرأ كنص
+          }
+
+          if (!res.ok) {
+            const errorMsg =
+              typeof data === "string"
+                ? data
+                : data?.detail || "Failed to create checkout session";
+            console.error("Backend error:", errorMsg);
+            throw new Error(errorMsg);
+          }
+
+          if (!data || !data.url)
+            throw new Error("Invalid response from server (missing url)");
+
+          message.textContent = "Redirecting to checkout…";
+          // Redirect to Stripe Checkout
+          window.location.href = data.url;
+        } catch (err) {
+          console.error("Checkout error:", err);
+          errorEl.style.display = "block";
+          errorEl.textContent = err?.message || "An unexpected error occurred";
+          setLoading(false);
+        }
+      }
+
+      payBtn.addEventListener("click", createCheckout);
+
+      // Fetch summary on load
+      async function fetchSummary() {
+        try {
+          const res = await fetch("/api/cart/summary", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(cartItems),
+          });
+          if (!res.ok) {
+            const txt = await res.text();
+            throw new Error(txt || "Failed to fetch cart summary");
+          }
+          const data = await res.json();
+          const total = Number(data?.total ?? 0);
+          const display = document.getElementById("amountDisplay");
+          display.textContent = `${total.toFixed(2)} USD`;
+        } catch (err) {
+          console.error("Cart summary error:", err);
+          const display = document.getElementById("amountDisplay");
+          display.textContent = "Error";
+        }
+      }
+
+      // Run summary fetch
+      fetchSummary();
+    </script>
+  </body>
+</html>
