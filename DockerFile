@@ -1,0 +1,27 @@
+# المرحلة الأولى: البناء (Build Stage)
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# 1. نسخ كل شيء من جذر المشروع إلى مجلد العمل /src
+# هذه الخطوة تسمح بالوصول إلى مجلد MyProjectFolder
+COPY . .
+
+# 2. استعادة التبعيات والتحقق من ملفات المشروع في المجلد الداخلي
+# يجب تحديد المسار إلى ملف .csproj
+RUN dotnet restore "stripIntegration/stripIntegration.csproj"
+
+# 3. نشر التطبيق
+# استخدم مسار ملف .csproj لعملية النشر
+RUN dotnet publish "stripIntegration/stripIntegration.csproj" -c Release -o /app/publish --no-restore
+# ----------------------------------------------------
+
+# المرحلة الثانية: التشغيل (Runtime Stage)
+FROM mcr.microsoft.com/dotnet/runtime:8.0 AS final
+WORKDIR /app
+
+# نسخ الملفات المنشورة
+COPY --from=build /app/publish .
+
+# 4. أمر التشغيل
+# استبدل MyProjectFolder.dll باسم ملف DLL الناتج
+ENTRYPOINT ["dotnet", "stripIntegration.dll"]
