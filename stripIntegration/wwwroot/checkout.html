@@ -165,7 +165,7 @@
             Items: cartItems,
           };
 
-          const res = await fetch("/api/payments/create-session", {
+          const res = await fetch("https://industrious-tenderness-production-894c.up.railway.app/api/payments/create-session", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(body),
@@ -206,7 +206,7 @@
       // Fetch summary on load
       async function fetchSummary() {
         try {
-          const res = await fetch("/api/cart/summary", {
+          const res = await fetch("https://industrious-tenderness-production-894c.up.railway.app/api/cart/summary", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(cartItems),

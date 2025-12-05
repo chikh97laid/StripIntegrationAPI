@@ -9,6 +9,7 @@ Properties/
 # Ignore configuration files
 appsettings.json
 appsettings.Development.json
+*.vscode
 
 # User-specific files
 *.rsuser

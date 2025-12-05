@@ -163,8 +163,8 @@ namespace stripIntegration.Controllers
             // Assumption: Amount is provided in major currency unit (e.g., 10.50 means $10.50)
             // var unitAmount = Convert.ToInt64(decimal.Round(request.Amount * 100m));
 
-            var successUrl = $"{Request.Scheme}://{Request.Host}/dashboard.html?session_id={{CHECKOUT_SESSION_ID}}";
-            var cancelUrl = $"{Request.Scheme}://{Request.Host}/cancel";
+            var successUrl = $"https://industrious-tenderness-production-894c.up.railway.app/dashboard.html?session_id={{CHECKOUT_SESSION_ID}}";
+            var cancelUrl = $"https://industrious-tenderness-production-894c.up.railway.app/cancel";
 
             var options = new SessionCreateOptions
             {
