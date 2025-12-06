@@ -19,7 +19,7 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 app.UseStaticFiles();
-// app.MapFallbackToFile("checkout.html");
+app.MapFallbackToFile("checkout.html");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
