@@ -405,8 +405,22 @@ namespace stripIntegration.Controllers
             return Ok(orderResponseDtos);
         }
 
-        [HttpPost("refund")]
-        public async Task<IActionResult> Refund([FromQuery] int orderId)
+    [HttpGet("products")]
+    public async Task<IActionResult> GetProducts()
+    {
+        var products = await _dbContext.Products.Select(p => new
+        {
+            p.Id,
+            p.Name,
+            p.Price,
+            p.Quantity
+        }).ToListAsync();
+
+        return Ok(products);
+    }
+
+    [HttpPost("refund")]
+    public async Task<IActionResult> Refund([FromQuery] int orderId)
         {
             if (orderId <= 0)
             {
