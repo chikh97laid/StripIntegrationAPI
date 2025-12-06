@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using stripIntegration.Data;
+using stripIntegration.Seeds;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,10 +29,10 @@ using (var scope = app.Services.CreateScope())
         var dbContext = services.GetRequiredService<AppDbContext>();
         
         // 1. Apply any pending migrations (create tables)
-        dbContext.Database.Migrate(); 
+        dbContext.Database.Migrate();
 
         // 2. Seed initial data
-        SeedExtensions.SeedData(dbContext); 
+        Extensions.SeedData(dbContext); 
     }
     catch (Exception ex)
     {
