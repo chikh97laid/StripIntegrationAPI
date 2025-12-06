@@ -29,7 +29,7 @@ using (var scope = app.Services.CreateScope())
         
         // 1. Apply any pending migrations (create tables)
         dbContext.Database.Migrate(); 
-        
+
         // 2. Seed initial data
         SeedExtensions.SeedData(dbContext); 
     }

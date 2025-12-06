@@ -1,3 +1,9 @@
+using stripIntegration.Data;
+using System.Linq;
+using System;
+
+namespace stripIntegration.Seeds
+{
 public static class SeedExtensions
 {
     public static void SeedData(AppDbContext dbContext)
@@ -31,4 +37,5 @@ public static class SeedExtensions
             dbContext.SaveChanges();
         }
     }
+}
 }
