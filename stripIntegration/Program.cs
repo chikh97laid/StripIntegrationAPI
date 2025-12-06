@@ -18,6 +18,28 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    try
+    {
+        // Get the database context
+        var dbContext = services.GetRequiredService<AppDbContext>();
+        
+        // 1. Apply any pending migrations (create tables)
+        dbContext.Database.Migrate(); 
+        
+        // 2. Seed initial data
+        SeedExtensions.SeedData(dbContext); 
+    }
+    catch (Exception ex)
+    {
+        var logger = services.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "An error occurred while migrating or seeding the database.");
+    }
+}
+
 app.UseStaticFiles();
 app.MapFallbackToFile("checkout.html");
 
