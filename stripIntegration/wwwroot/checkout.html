@@ -6,216 +6,170 @@
     <title>Checkout — Proceed to Payment</title>
     <style>
       :root {
-        --bg: #f5f7fb;
-        --card: #ffffff;
-        --accent: #5469d4;
-        --accent-600: #4352c0;
-        --muted: #6b7280;
+        --bg: #111827;
+        --card: #1f2937;
+        --card-hover: #374151;
+        --accent: #3b82f6;
+        --accent-hover: #2563eb;
+        --muted: #9ca3af;
+        --text: #f9fafb;
+        --text-muted: #6b7280;
+        --success: #10b981;
+        --danger: #ef4444;
+        --border: #374151;
       }
       html,
       body {
         height: 100%;
-      }
-      body {
         margin: 0;
         font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto,
           "Helvetica Neue", Arial;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        background: linear-gradient(180deg, var(--bg), #edf2f7);
+        background: var(--bg);
+        color: var(--text);
       }
-      .card {
-        width: min(520px, 94vw);
+      .container {
+        display: grid;
+        grid-template-columns: 1fr 400px;
+        gap: 32px;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 32px;
+        min-height: 100vh;
+      }
+      /* Left Column - Product Selection */
+      .left-column {
         background: var(--card);
         border-radius: 12px;
-        padding: 36px;
-        box-shadow: 0 6px 20px rgba(16, 24, 40, 0.08);
-        text-align: center;
-      }
-      h1 {
-        font-size: 20px;
-        margin: 0 0 8px;
-        color: #0f172a;
-      }
-      p.lead {
-        margin: 0 0 20px;
-        color: var(--muted);
-      }
-      .price {
-        font-weight: 700;
-        color: #0f172a;
-        margin-bottom: 20px;
-      }
-      .btn {
-        display: inline-block;
-        padding: 12px 20px;
-        border-radius: 8px;
-        background: linear-gradient(180deg, var(--accent), var(--accent-600));
-        color: #fff;
-        font-weight: 600;
-        border: 0;
-        cursor: pointer;
-        box-shadow: 0 6px 18px rgba(67, 82, 192, 0.18);
-        transition: transform 0.08s ease, opacity 0.08s ease;
-      }
-      .btn:disabled {
-        opacity: 0.6;
-        cursor: default;
-      }
-      .meta {
-        font-size: 13px;
-        margin-top: 18px;
-        color: var(--muted);
-      }
-      .error {
-        color: #b91c1c;
-        margin-top: 16px;
-      }
-      .spinner {
-        display: inline-block;
-        width: 16px;
-        height: 16px;
-        border: 2px solid rgba(255, 255, 255, 0.25);
-        border-top-color: #ffffff;
-        border-radius: 50%;
-        animation: spin 0.8s linear infinite;
-        margin-left: 10px;
-        vertical-align: middle;
-      }
-      @keyframes spin {
-        to {
-          transform: rotate(360deg);
-        }
-      }
-
-      .dashboard-btn {
-        display: inline-block;
-        padding: 12px 25px;
-        background-color: #4caf50; /* أخضر */
-        color: white;
-        text-decoration: none;
-        font-size: 18px;
-        border-radius: 8px;
-        transition: background-color 0.3s, transform 0.2s;
-      }
-
-      .dashboard-btn:hover {
-        background-color: #45a049;
-        transform: scale(1.05);
-      }
-
-      .dashboard-container {
-        text-align: center;
-        margin-top: 50px;
-      }
-
-      .product-selection {
-        background-color: var(--card);
-        border-radius: 12px;
         padding: 24px;
-        margin-bottom: 24px;
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
       }
 
-      .form-group {
-        margin-bottom: 16px;
-      }
-
-      .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: #374151;
-      }
-
-      .form-group input {
-        width: 100%;
-        padding: 12px;
-        border: 1px solid #d1d5db;
-        border-radius: 8px;
-        font-size: 14px;
-      }
-
-      .products-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-        gap: 16px;
+      .left-column h1 {
+        font-size: 28px;
         margin-bottom: 24px;
+        color: var(--text);
+      }
+
+      .products-list {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
       }
 
       .product-card {
-        background: var(--bg);
+        background: var(--card-hover);
+        border: 1px solid var(--border);
         border-radius: 8px;
         padding: 16px;
-        border: 1px solid #e5e7eb;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background-color 0.2s;
+      }
+
+      .product-card:hover {
+        background: var(--border);
+      }
+
+      .product-info {
+        flex: 1;
       }
 
       .product-name {
-        font-size: 18px;
+        font-size: 16px;
         font-weight: 600;
-        margin-bottom: 8px;
-        color: #111827;
+        margin-bottom: 4px;
+        color: var(--text);
       }
 
       .product-price {
-        font-size: 16px;
+        font-size: 14px;
         color: var(--accent);
-        font-weight: 600;
-        margin-bottom: 8px;
+        font-weight: 500;
+        margin-bottom: 4px;
       }
 
       .stock-info {
-        font-size: 14px;
-        color: #6b7280;
-        margin-bottom: 12px;
+        font-size: 12px;
+        color: var(--text-muted);
       }
 
-      .quantity-input {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin-bottom: 12px;
-      }
-
-      .quantity-input input {
-        width: 80px;
-        padding: 8px;
-        border: 1px solid #d1d5db;
-        border-radius: 4px;
-      }
-
-      .add-to-cart-btn {
+      .select-btn {
         background: var(--accent);
         color: white;
         border: none;
         padding: 8px 16px;
-        border-radius: 4px;
+        border-radius: 6px;
         cursor: pointer;
         font-size: 14px;
-        transition: background 0.2s;
-        width: 100%;
+        font-weight: 500;
+        transition: background-color 0.2s, transform 0.1s;
+        min-width: 100px;
       }
 
-      .add-to-cart-btn:hover:not(:disabled) {
-        background: var(--accent-600);
+      .select-btn:hover:not(:disabled) {
+        background: var(--accent-hover);
       }
 
-      .add-to-cart-btn:disabled {
-        background: #9ca3af;
+      .select-btn.selected {
+        background: var(--success);
+      }
+
+      .select-btn:disabled {
+        background: var(--muted);
         cursor: not-allowed;
       }
 
-      .cart-section {
-        background-color: var(--card);
+      /* Right Column - Checkout Summary */
+      .right-column {
+        position: sticky;
+        top: 32px;
+        height: fit-content;
+      }
+
+      .checkout-summary {
+        background: var(--card);
         border-radius: 12px;
         padding: 24px;
-        margin-bottom: 24px;
         box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+        border: 1px solid var(--border);
+      }
+
+      .checkout-summary h2 {
+        font-size: 20px;
+        margin-bottom: 20px;
+        color: var(--text);
+        border-bottom: 1px solid var(--border);
+        padding-bottom: 12px;
+      }
+
+      .email-section {
+        margin-bottom: 20px;
+      }
+
+      .email-input {
+        width: 100%;
+        padding: 12px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        color: var(--text);
+        font-size: 14px;
+      }
+
+      .email-input:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+      }
+
+      .email-input::placeholder {
+        color: var(--text-muted);
       }
 
       .cart-items {
-        margin-bottom: 16px;
+        margin-bottom: 20px;
+        min-height: 100px;
       }
 
       .cart-item {
@@ -224,76 +178,192 @@
         align-items: center;
         padding: 12px;
         background: var(--bg);
-        border-radius: 8px;
+        border-radius: 6px;
         margin-bottom: 8px;
+        border: 1px solid var(--border);
       }
 
-      .cart-item-info {
-        display: flex;
-        align-items: center;
-        gap: 16px;
+      .cart-item-name {
+        font-weight: 500;
+        color: var(--text);
+      }
+
+      .cart-item-price {
+        color: var(--accent);
+        font-weight: 600;
       }
 
       .remove-btn {
-        background: #dc2626;
+        background: var(--danger);
         color: white;
         border: none;
-        padding: 6px 12px;
+        padding: 4px 8px;
         border-radius: 4px;
         cursor: pointer;
         font-size: 12px;
+        transition: background-color 0.2s;
       }
 
       .remove-btn:hover {
-        background: #b91c1c;
+        background: #dc2626;
+      }
+
+      .empty-cart {
+        text-align: center;
+        color: var(--text-muted);
+        font-style: italic;
+        padding: 20px;
+      }
+
+      .total-section {
+        border-top: 1px solid var(--border);
+        padding-top: 16px;
+        margin-bottom: 20px;
+      }
+
+      .total-amount {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text);
+      }
+
+      .pay-btn {
+        width: 100%;
+        background: var(--accent);
+        color: white;
+        border: none;
+        padding: 16px;
+        border-radius: 8px;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s, transform 0.1s;
+        margin-bottom: 12px;
+      }
+
+      .pay-btn:hover:not(:disabled) {
+        background: var(--accent-hover);
+      }
+
+      .pay-btn:disabled {
+        background: var(--muted);
+        cursor: not-allowed;
+      }
+
+      .pay-btn.loading {
+        background: var(--muted);
+        cursor: not-allowed;
+      }
+
+      .dashboard-btn {
+        display: block;
+        text-align: center;
+        color: var(--accent);
+        text-decoration: none;
+        font-size: 14px;
+        transition: color 0.2s;
+      }
+
+      .dashboard-btn:hover {
+        color: var(--accent-hover);
+      }
+
+      .message {
+        margin-top: 12px;
+        padding: 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        display: none;
+      }
+
+      .message.error {
+        background: var(--danger);
+        color: white;
+      }
+
+      .message.success {
+        background: var(--success);
+        color: white;
       }
 
       .loading {
         text-align: center;
         color: var(--muted);
         padding: 40px;
+        font-style: italic;
+      }
+
+      /* Spinner */
+      .spinner {
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.25);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin-left: 8px;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .container {
+          grid-template-columns: 1fr;
+          gap: 16px;
+          padding: 16px;
+        }
+        .right-column {
+          position: static;
+        }
       }
     </style>
   </head>
   <body>
-    <!-- Product Selection Section -->
-    <div class="product-selection">
-      <h1>Choose Your Products</h1>
-      <div class="form-group">
-        <label for="customerEmail">Customer Email:</label>
-        <input type="email" id="customerEmail" name="customerEmail" required placeholder="Enter your email address">
+    <div class="container">
+      <!-- Left Column - Product Selection -->
+      <div class="left-column">
+        <h1>Shop Products</h1>
+        <div class="products-list" id="productsContainer">
+          <div class="loading">Loading products...</div>
+        </div>
       </div>
 
-      <div id="productsContainer">
-        <div class="loading">Loading products...</div>
-      </div>
-    </div>
+      <!-- Right Column - Checkout Summary -->
+      <div class="right-column">
+        <div class="checkout-summary">
+          <h2>Checkout Summary</h2>
 
-    <!-- Cart Section -->
-    <div class="cart-section">
-      <h2>Your Cart</h2>
-      <div id="cartContainer" class="cart-items">
-        <p>No items in cart yet.</p>
-      </div>
-      <div class="price">
-        Total Amount: <strong id="amountDisplay">0.00 USD</strong>
-      </div>
-    </div>
+          <div class="email-section">
+            <input type="email" id="customerEmail" class="email-input" placeholder="Enter your email address" required>
+          </div>
 
-    <!-- Payment Section -->
-    <div class="card" role="main">
-      <h1>Proceed to Payment</h1>
-      <p class="lead">
-        Secure checkout powered by Stripe — a very small demo page.
-      </p>
+          <div id="cartContainer" class="cart-items">
+            <div class="empty-cart">No items selected yet</div>
+          </div>
 
-      <button id="payBtn" class="btn" disabled>Pay</button>
-      <div class="dashboard-container">
-        <a href="/dashboard.html" class="dashboard-btn">View Dashboard</a>
+          <div class="total-section">
+            <div class="total-amount">
+              <span>Total:</span>
+              <span id="amountDisplay">$0.00</span>
+            </div>
+          </div>
+
+          <button id="payBtn" class="pay-btn" disabled>Proceed to Payment</button>
+
+          <a href="/dashboard.html" class="dashboard-btn">View Dashboard</a>
+
+          <div id="message" class="message"></div>
+        </div>
       </div>
-
-      <div id="message" class="meta" aria-live="polite"></div>
-      <div id="error" class="error" role="alert" style="display: none"></div>
     </div>
 
     <script>
@@ -305,7 +375,6 @@
       // DOM elements
       const payBtn = document.getElementById("payBtn");
       const message = document.getElementById("message");
-      const errorEl = document.getElementById("error");
       const customerEmailInput = document.getElementById("customerEmail");
       const productsContainer = document.getElementById("productsContainer");
       const cartContainer = document.getElementById("cartContainer");
@@ -329,115 +398,115 @@
           displayProducts();
         } catch (error) {
           console.error("Error loading products:", error);
-          productsContainer.innerHTML = "<div class='error'>Failed to load products. Please try again later.</div>";
+          productsContainer.innerHTML = '<div class="message error" style="display: block;">Failed to load products. Please refresh the page.</div>';
         }
       }
 
-      // Display products in grid
+      // Display products in vertical list
       function displayProducts() {
         if (products.length === 0) {
           productsContainer.innerHTML = "<div class='loading'>No products available.</div>";
           return;
         }
 
-        const gridHTML = `
-          <div class="products-grid">
-            ${products.map(product => `
-              <div class="product-card">
-                <div class="product-name">${product.name}</div>
-                <div class="product-price">$${product.price.toFixed(2)}</div>
-                <div class="stock-info">Available: ${product.quantity} in stock</div>
-                <div class="quantity-input">
-                  <label>Quantity:</label>
-                  <input type="number" min="1" max="${product.quantity}" placeholder="1" id="qty-${product.id}">
-                </div>
-                <button class="add-to-cart-btn" onclick="addToCart(${product.id})" ${product.quantity === 0 ? 'disabled' : ''}>
-                  ${product.quantity === 0 ? 'Out of Stock' : 'Add to Cart'}
-                </button>
-              </div>
-            `).join('')}
+        const productsHTML = products.map(product => `
+          <div class="product-card">
+            <div class="product-info">
+              <div class="product-name">${product.name}</div>
+              <div class="product-price">$${product.price.toFixed(2)}</div>
+              <div class="stock-info">Available: ${product.quantity} in stock</div>
+            </div>
+            <button class="select-btn"
+                    id="btn-${product.id}"
+                    onclick="toggleProduct(${product.id})"
+                    ${product.quantity === 0 ? 'disabled' : ''}>
+              ${product.quantity === 0 ? 'Out of Stock' : 'Select'}
+            </button>
           </div>
-        `;
+        `).join('');
 
-        productsContainer.innerHTML = gridHTML;
+        productsContainer.innerHTML = productsHTML;
+
+        // Update button states based on cart
+        updateProductButtonStates();
       }
 
-      // Add product to cart
-      function addToCart(productId) {
+      // Toggle product selection (add/remove from cart)
+      function toggleProduct(productId) {
         const product = products.find(p => p.id === productId);
         if (!product) return;
 
-        const qtyInput = document.getElementById(`qty-${productId}`);
-        const quantity = parseInt(qtyInput.value) || 1;
-
-        // Validate quantity
-        if (quantity <= 0) {
-          alert("Please enter a valid quantity greater than 0.");
-          return;
-        }
-        if (quantity > product.quantity) {
-          alert(`Only ${product.quantity} items available in stock.`);
-          return;
-        }
-
         // Check if already in cart
-        const existingCartItem = cartItems.find(item => item.ProductId === productId);
-        if (existingCartItem) {
-          existingCartItem.Quantity += quantity;
+        const existingCartItemIndex = cartItems.findIndex(item => item.ProductId === productId);
+
+        if (existingCartItemIndex >= 0) {
+          // Remove from cart
+          cartItems.splice(existingCartItemIndex, 1);
         } else {
-          cartItems.push({
-            ProductId: productId,
-            Quantity: quantity
-          });
+          // Add to cart (single quantity only)
+          if (product.quantity > 0) {
+            cartItems.push({
+              ProductId: productId,
+              Quantity: 1
+            });
+          }
         }
 
+        updateProductButtonStates();
         updateCartDisplay();
-        qtyInput.value = ""; // Clear input
-
         validateCheckout();
       }
 
       // Remove item from cart
       function removeFromCart(productId) {
         cartItems = cartItems.filter(item => item.ProductId !== productId);
+        updateProductButtonStates();
         updateCartDisplay();
         validateCheckout();
+      }
+
+      // Update product button states based on cart
+      function updateProductButtonStates() {
+        products.forEach(product => {
+          const btn = document.getElementById(`btn-${product.id}`);
+          if (btn) {
+            const inCart = cartItems.some(item => item.ProductId === product.id);
+            btn.classList.toggle('selected', inCart);
+            btn.textContent = product.quantity === 0 ? 'Out of Stock' :
+                             inCart ? 'Selected' : 'Select';
+          }
+        });
       }
 
       // Update cart display
       function updateCartDisplay() {
         if (cartItems.length === 0) {
-          cartContainer.innerHTML = "<p>No items in cart yet.</p>";
-          amountDisplay.textContent = "0.00 USD";
+          cartContainer.innerHTML = '<div class="empty-cart">No items selected yet</div>';
+          amountDisplay.textContent = '$0.00';
           return;
         }
 
         const cartItemsHTML = cartItems.map(cartItem => {
           const product = products.find(p => p.id === cartItem.ProductId);
-          if (!product) return "";
-
-          const totalPrice = product.price * cartItem.Quantity;
+          if (!product) return '';
 
           return `
             <div class="cart-item">
-              <div class="cart-item-info">
-                <strong>${product.name}</strong> × ${cartItem.Quantity} @ $${product.price.toFixed(2)} each = $${totalPrice.toFixed(2)}
-              </div>
-              <button class="remove-btn" onclick="removeFromCart(${cartItem.ProductId})">Remove</button>
+              <span class="cart-item-name">${product.name}</span>
+              <span class="cart-item-price">$${product.price.toFixed(2)}</span>
+              <button class="remove-btn" onclick="removeFromCart(${cartItem.ProductId})">×</button>
             </div>
           `;
         }).join('');
 
         cartContainer.innerHTML = cartItemsHTML;
-
-        // Update total
         updateCartTotal();
       }
 
       // Update cart total
       async function updateCartTotal() {
         if (cartItems.length === 0) {
-          amountDisplay.textContent = "0.00 USD";
+          amountDisplay.textContent = '$0.00';
           return;
         }
 
@@ -454,10 +523,10 @@
 
           const data = await response.json();
           const total = Number(data.total || 0);
-          amountDisplay.textContent = `${total.toFixed(2)} USD`;
+          amountDisplay.textContent = `$${total.toFixed(2)}`;
         } catch (error) {
           console.error("Error calculating total:", error);
-          amountDisplay.textContent = "Error";
+          amountDisplay.textContent = 'Error';
         }
       }
 
@@ -472,16 +541,19 @@
 
       // Set loading state for pay button
       function setLoading(isLoading) {
-        payBtn.disabled = isLoading;
-        payBtn.innerHTML = isLoading
-          ? 'Opening… <span class="spinner" aria-hidden="true"></span>'
-          : "Pay";
+        payBtn.classList.toggle('loading', isLoading);
+        payBtn.innerHTML = isLoading ?
+          'Processing...<span class="spinner"></span>' :
+          'Proceed to Payment';
       }
 
       // Create checkout session
       async function createCheckout() {
-        errorEl.style.display = "none";
-        message.textContent = "";
+        // Hide any previous messages
+        message.className = 'message';
+        message.style.display = 'none';
+
+        customerEmail = customerEmailInput.value.trim();
 
         const body = {
           CustomerEmail: customerEmail,
@@ -510,16 +582,22 @@
           }
 
           if (!data || !data.url) {
-            throw new Error("Invalid response from server (missing url)");
+            throw new Error("Invalid response from server");
           }
 
-          message.textContent = "Redirecting to checkout…";
-          window.location.href = data.url;
+          message.className = 'message success';
+          message.textContent = 'Redirecting to checkout...';
+          message.style.display = 'block';
+
+          setTimeout(() => {
+            window.location.href = data.url;
+          }, 1000);
 
         } catch (error) {
           console.error("Checkout error:", error);
-          errorEl.style.display = "block";
-          errorEl.textContent = error.message || "An unexpected error occurred";
+          message.className = 'message error';
+          message.textContent = error.message || "An unexpected error occurred";
+          message.style.display = 'block';
           setLoading(false);
         }
       }
