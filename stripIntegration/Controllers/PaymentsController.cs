@@ -219,9 +219,9 @@ namespace stripIntegration.Controllers
             await transaction.CommitAsync(); return Ok(new { url = session.Url });
         }
 
-        // POST /api/cart/summary
-        [HttpPost("/api/cart/summary")]
-        public async Task<IActionResult> CartSummary([FromBody] List<OrderItemDto> items)
+        // POST /api/payments/cart/summary
+        [HttpPost("cart/summary")]
+        public async Task<IActionResult> CartSummary(List<OrderItemDto> items)
         {
             if (items == null || !items.Any())
                 return BadRequest(new { error = "Items are required" });
