@@ -57,6 +57,14 @@
             background-color: #ccc;
             cursor: not-allowed;
         }
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+        .nav-section {
+            text-align: right;
+            margin-bottom: 20px;
+        }
         .orders-table {
             width: 100%;
             border-collapse: collapse;
@@ -143,12 +151,18 @@
                 padding: 8px;
             }
         }
+        .nav-section a {
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
     <h1>My Orders Dashboard</h1>
 
     <div class="dashboard">
+        <div class="nav-section">
+            <a href="checkout.html" class="btn btn-secondary">Back to Checkout</a>
+        </div>
         <form id="customerForm">
             <div class="form-group">
                 <label for="customerEmail">Enter your email to view orders:</label>
