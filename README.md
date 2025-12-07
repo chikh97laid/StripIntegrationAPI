@@ -31,15 +31,13 @@
 
 ## 💻 Local Development (Run Locally)
 
-### 1️⃣ Clone the repository
-``
+```bash
 # 1️⃣ Clone the repository
 git clone https://github.com/chikh97laid/StripIntegrationAPI.git
 cd StripIntegrationAPI
 
 # 2️⃣ Register on Stripe & Add Environment Variables
 # Create a Stripe account to get API keys, then create a .env file or set system environment variables
-
 export ConnectionStrings__DefaultConnection="Host=HOST;Database=DB;Username=USER;Password=PASS;SSL Mode=Require;Trust Server Certificate=true"
 export Stripe__SecretKey="sk_test_..."
 export Stripe__WebhookSecret="whsec_..."
@@ -68,4 +66,4 @@ export ConnectionStrings__DefaultConnection="Host=your-host.render.com;Database=
 # 📝 Notes
 # - Use Stripe test keys and test cards during development
 # - Ensure database migrations exist locally before deploying
-# - wwwroot/checkout.html is a demo checkout page — update fetch URLs if using a different host/domainنسخ الكود
+# - wwwroot/checkout.html is a demo checkout page — update fetch URLs if using a different host/domain
