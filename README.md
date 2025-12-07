@@ -4,84 +4,107 @@
 [![PostgreSQL](https://img.shields.io/badge/Postgres-PostgreSQL-green)](https://www.postgresql.org/)
 [![Stripe](https://img.shields.io/badge/Stripe-Payments-orange)](https://stripe.com/)
 
-**StripIntegrationAPI** — a compact ASP.NET Core 8 Web API that demonstrates Stripe Checkout integration, order & product management, and PostgreSQL persistence. Includes a small static checkout page for quick testing.
+**StripIntegrationAPI** — a compact ASP.NET Core 8 Web API integrating Stripe Checkout with order & product management using PostgreSQL + EF Core.  
+Includes a simple static checkout page for quick payment testing.
 
 ---
 
-## Live demo
+## Live Demo
 https://stripintegrationapi.onrender.com/checkout.html
 
 ---
 
-## Key features
-- Create Stripe Checkout sessions and handle webhooks  
-- Orders, OrderItems and Product persistence (Postgres via EF Core)  
-- Seeded demo data + simple frontend (checkout.html)  
-- Docker-ready for easy deployment
+## Key Features
+- Stripe Checkout session creation + webhook handling  
+- Orders, OrderItems, Product entities with PostgreSQL persistence  
+- Demo frontend in `wwwroot/checkout.html`  
+- Docker-ready build and run workflow  
 
 ---
 
-## Tech stack
-- Backend: ASP.NET Core 8 (C#)  
-- ORM: Entity Framework Core (Npgsql / PostgreSQL)  
-- Payments: Stripe (Stripe.net)  
-- Frontend demo: static HTML/CSS/JS in `wwwroot`  
-- Container: Docker
+## Tech Stack
+- **Backend:** ASP.NET Core 8 (C#)  
+- **Database:** PostgreSQL + EF Core (Npgsql)  
+- **Payments:** Stripe (Stripe.net)  
+- **Frontend:** HTML/CSS/JS  
+- **Containerization:** Docker  
 
 ---
 
-## Quick start (local)
+## Quick Start (Local)
 
-1. Clone:
+### 1. Clone the repository
 ```bash
 git clone https://github.com/chikh97laid/StripIntegrationAPI.git
 cd StripIntegrationAPI
-Add environment variables (or update appsettings.json):
+```
 
-bash
-نسخ الكود
-# example env names read by .NET configuration
+### 2. Add environment variables
+Create a `.env` file (or set system env variables):
+
+```env
 ConnectionStrings__DefaultConnection="Host=HOST;Database=DB;Username=USER;Password=PASS;SSL Mode=Require;Trust Server Certificate=true"
 Stripe__SecretKey="sk_test_..."
 Stripe__WebhookSecret="whsec_..."
-Create / apply migrations (local dev):
+```
 
-bash
-نسخ الكود
+### 3. Apply migrations
+```bash
 dotnet ef database update
-Run:
+```
 
-bash
-نسخ الكود
+### 4. Run the API
+```bash
 dotnet run
-# open http://localhost:5000/checkout.html  (or the URL shown in the console)
-Important: Commit and push your Migrations/ folder to GitHub so your host (Render/Azure) can apply them during deployment.
+```
 
-Docker (build & run)
-bash
-نسخ الكود
+Open the demo page:  
+```
+http://localhost:5000/checkout.html
+```
+
+> ⚠️ Make sure the `Migrations/` folder is committed so deployments can apply the schema.
+
+---
+
+## Docker (Build & Run)
+
+### 1. Build the image
+```bash
 docker build -t stripintegrationapi .
-docker run -e ConnectionStrings__DefaultConnection="Host=...;Database=...;Username=...;Password=...;SSL Mode=Require;Trust Server Certificate=true" -e Stripe__SecretKey="sk_test_..." -p 8080:80 stripintegrationapi
-# open http://localhost:8080/checkout.html
-Environment variables (summary)
-ConnectionStrings__DefaultConnection — Postgres connection string (key=value;... format)
-Example:
+```
 
-pgsql
-نسخ الكود
+### 2. Run the container
+```bash
+docker run \
+  -e ConnectionStrings__DefaultConnection="Host=...;Database=...;Username=...;Password=...;SSL Mode=Require;Trust Server Certificate=true" \
+  -e Stripe__SecretKey="sk_test_..." \
+  -p 8080:80 stripintegrationapi
+```
+
+Then open:
+```
+http://localhost:8080/checkout.html
+```
+
+---
+
+## Environment Variables Summary
+
+| Variable | Description |
+|---------|-------------|
+| `ConnectionStrings__DefaultConnection` | PostgreSQL connection string |
+| `Stripe__SecretKey` | Stripe secret key |
+| `Stripe__WebhookSecret` | Stripe webhook signing secret |
+
+**PostgreSQL example:**
+```env
 Host=your-host.render.com;Database=stripintegrationdb;Username=stripuser;Password=secret;SSL Mode=Require;Trust Server Certificate=true
-Stripe__SecretKey — Stripe secret key (sk_test_...)
+```
 
-Stripe__WebhookSecret — Stripe webhook signing secret (whsec_...)
+---
 
-Notes
-Use Stripe Test keys and Stripe test cards while developing.
+## Links
+- **GitHub:** https://github.com/chikh97laid  
+- **LinkedIn:** https://linkedin.com/in/chikhouladlaid
 
-If you see relation "Products" does not exist make sure migrations were created locally and pushed to the repository, then re-deploy so the host can apply them.
-
-wwwroot/checkout.html is the demo checkout page — change fetch URLs if using a different host/domain.
-
-Links
-Repo: https://github.com/chikh97laid/StripIntegrationAPI
-
-LinkedIn: Your LinkedIn profile here ← replace with your real LinkedIn URL
