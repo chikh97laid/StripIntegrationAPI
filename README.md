@@ -32,7 +32,7 @@
 ## 💻 Local Development (Run Locally)
 
 ### 1️⃣ Clone the repository
-```bash
+
 # 1️⃣ Clone the repository
 git clone https://github.com/chikh97laid/StripIntegrationAPI.git
 cd StripIntegrationAPI
