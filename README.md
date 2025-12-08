@@ -10,7 +10,7 @@
 
 ## 🌐 Live Demo
 
-[Checkout Page](https://stripintegrationapi.onrender.com/checkout.html)
+https://stripintegrationapi.onrender.com/checkout.html
 
 ---
 
